@@ -1,44 +1,43 @@
-var express = require("express");
-var router = express.Router();
-var burger = require("../models/burger.js");
+var db = require("../models");
 
-router.get("/", function(req, res) {
-  res.redirect("/burgers");
-});
+module.exports = function(app) {
 
-router.get("/burgers", function(req, res) {
-  burger.all(function(data) {
-    var hbsObject = {
-      burgers: data
-    };
-    console.log(hbsObject);
-    res.render("index", hbsObject);
+  app.get("/api/burgers", function(req, res) {
+    db.NewBurger.findAll({}).then(function(allBurgers) {
+      res.json(allBurgers);
+    });
   });
-});
 
-router.post("/burgers/create", function(req, res) {
-  burger.create([
-    "burger_name", "devoured"
-  ], [
-    req.body.burger_name, req.body.devoured
-  ], function() {
-    res.redirect("/burgers");
+  app.post("/api/burgers", function(req, res) {
+    db.NewBurger.create({
+      burger_name: req.body.burger_name,
+      devoured: req.body.devoured
+    }).then(function(newBurger) {
+      res.json(newBurger);
+    });
   });
-});
 
-router.put("/burgers/update/:id", function(req, res) {
-  var whereVar = "id = " + req.params.id;
+  // app.delete("/api/burgers", function(req, res) {
+  //   db.NewBurger.destroy({
+  //     where: {
+  //       id: req.body.id
+  //     }
+  //   }).then(function(theBurger) {
+  //     res.json(theBurger);
+  //   });
 
-  console.log("whereVar", whereVar);
+  // });
 
-  burger.update({
-    devoured: req.body.devoured
-  }, whereVar, function() {
-    res.redirect("/burgers");
+  app.put("/api/burgers", function(req, res) {
+
+    db.NewBurger.update({
+      devoured: req.body.devoured
+    }, {
+      where: {
+        id: req.body.id
+      }
+    }).then(function(updatedBurger) {
+      res.json(updatedBurger);
+    });
   });
-});
-
-
-module.exports = router;
-
-
+};
