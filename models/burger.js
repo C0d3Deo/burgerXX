@@ -5,12 +5,12 @@ module.exports = function(sequelize, DataTypes) {
     	allowNull: false,
     	validate: {
     		len: [1]
-    	},
+    	}
+    },
     devoured: {
     	type: DataTypes.BOOLEAN,
     	defaultValue: false
-    },
-}
+    }
   });
   return NewBurger;
 };

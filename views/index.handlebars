@@ -1,0 +1,84 @@
+  <header>
+    <div class="navbar jumbotron text-center h1">
+      Welcome to McDoogan's!
+    </div>
+  </header>
+
+{{!-- This is not closed yet --}}
+<div class="container row col-lg-12">
+  <div class="panel panel-warning col-lg-offset-1 col-lg-4 panelHeader">
+    <div class="panel-heading">
+      <h2 class="panel-title text-center">Fresh Burgers</h2>
+    </div>
+    <div class="panel-body">
+      <table class="table table-striped table-hover table-responsive">
+        <tbody>
+
+          {{#each burgers}}
+            {{#unless this.devoured}}
+              <tr data-columns="2">
+                <td class="h4">
+                  {{this.burger_name}}
+                </td>
+
+                <td>
+                  <form action="burgers/update/{{this.id}}?_method=PUT" method="POST">
+                    <input type="hidden" name="devoured" value="1">
+                    <button class="btn btn-primary" type="submit">DEVOUR!</button>
+                  </form>
+                </td>
+              </tr>
+            {{/unless}}
+          {{/each}}
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel panel-warning col-lg-offset-2 col-lg-4 panelHeader">
+    <div class="panel-heading">
+      <h3 class="panel-title text-center">Eaten Burgers</h3>
+    </div>
+    <div class="panel-body">
+      <table class="table table-striped table-hover table-responsive">
+        <tbody>
+          {{#each burgers}}
+            {{#if this.devoured}}
+              <tr data-columns="2">
+                <td class="h4">
+                  {{this.burger_name}}
+                </td>
+
+                <td>
+                  <form action="burgers/update/{{this.id}}?_method=PUT" method="POST">
+                    <input type="hidden" name="devoured" value="0">
+                    <button class="btn btn-success" type="submit">Regurgitate</button>
+                  </form>
+              </td>
+            </tr>
+            {{/if}}
+          {{/each}}
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="container row col-lg-12">
+  <div class="col-lg-offset-4 col-lg-4">
+    <h2 class="text-center h2 createBurger">Create a Burger</h2>
+    <form class="create-update-form" action="burgers/create" method="POST">
+
+      <div class="form-group">
+        <label class="h3 burgerName" for="burg">Burger Name:</label>
+        <textarea id="burg" name="burger_name" rows="2" cols="40"></textarea>
+        <input type="hidden" name="devoured" value="0">
+      </div>
+
+      <button class="btn btn-info col-lg-offset-5" type="submit">Add Burger</button>
+    </form>
+  </div>
+</div>
+
